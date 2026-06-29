@@ -45,7 +45,7 @@ NOT authored in this partition. The frontend `mockIPC` test belongs to the
 **macOS E2E ceiling:** `tauri-driver` / WebDriver E2E is experimental in Tauri v2
 and **unsupported on macOS** (WKWebView has no WebDriver client). The realistic
 top tier on macOS is `mockIPC`. Do NOT claim Playwright/WebDriver E2E for this
-project. SC8 is verified manually at runtime (`pnpm tauri dev` → `getTransactions()`).
+project. SC8 is verified manually at runtime (`bun run tauri dev` → `getTransactions()`).
 
 ---
 
@@ -111,11 +111,11 @@ entry — relying on tokio as a transitive dep produces a hard compile error.
 
 | SC | Gate | Covered by |
 |---|---|---|
-| SC1 `pnpm tauri dev` launches | Manual / lead | N/A (cannot run without toolchain + display) |
+| SC1 `bun run tauri dev` launches | Manual / lead | N/A (cannot run without toolchain + display) |
 | SC2 `cargo test` passes (list_transactions domain unit test) | Rust toolchain | `list_transactions.rs` inline (rust-dev) + `tests/domain_list_transactions.rs` (this file) — **BLOCKED by lib.rs** |
 | SC3 `cargo clippy -- -D warnings` exits 0 | Rust toolchain | NOT RUN (toolchain guard) |
 | SC4 `grep "tauri::"` in `domain/` → 0 | grep | Runtime check; domain tests import only std/serde (no tauri::) |
 | SC5 `grep "tauri::"` in `infrastructure/` → 0 | grep | Runtime check; infra tests import only std |
 | SC6 `invoke(` only under `src/api/` | grep | frontend-stubs partition |
-| SC7 `pnpm lint` exits 0 | Node/pnpm | frontend-stubs partition |
+| SC7 `bun run lint` exits 0 | Node/bun | frontend-stubs partition |
 | SC8 `getTransactions()` → `[]` | Manual runtime | `get_transactions_returns_ok_empty_vec_at_init` validates logic; IPC registration gate is runtime SC8 |
