@@ -1,0 +1,163 @@
+@font-face {
+  font-family: "Press Start 2P";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../../assets/PressStart2P-Regular.woff2") format("woff2");
+  font-display: block;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes floatIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fullscreen overlay */
+.splash {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  cursor: pointer;
+  /* Fallback BG if image fails to load */
+  background-color: #F1DB71;
+  background-image:
+    url("/splash-bg.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  animation: fadeIn 0.6s ease both;
+}
+
+/* CRT scanline overlay — neutralized for bright theme */
+.splash::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255, 220, 80, 0.03) 0px,
+    rgba(255, 220, 80, 0.03) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  z-index: 1;
+}
+
+/* All content sits above scanline */
+.content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* Logo image — pixel-art upscale */
+.logo {
+  max-width: 480px;
+  width: 100%;
+  height: auto;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  animation: floatIn 0.8s ease 0.2s both;
+  filter: drop-shadow(0 0 16px rgba(245, 197, 24, 0.5));
+}
+
+/* Mascot image */
+.mascot {
+  width: 120px;
+  height: 120px;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  animation: floatIn 0.8s ease 0.5s both;
+  filter: drop-shadow(0 0 8px rgba(241, 219, 113, 0.6));
+}
+
+/* "PRESS ANY KEY" blinking prompt */
+.pressAnyKey {
+  font-family: "Press Start 2P", monospace;
+  font-size: 14px;
+  color: #5a3000;
+  text-shadow:
+    0 0 6px #f5c518,
+    0 0 12px rgba(245, 197, 24, 0.6);
+  animation: blink 1.2s step-start infinite, floatIn 0.8s ease 0.8s both;
+  /* Ensure visible in reduced-motion fallback */
+  letter-spacing: 0.05em;
+}
+
+/* Skip button */
+.skipBtn {
+  font-family: "Press Start 2P", monospace;
+  font-size: 10px;
+  color: rgba(90, 48, 0, 0.8);
+  background: transparent;
+  border: 1px solid rgba(90, 48, 0, 0.65);
+  border-radius: 4px;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  animation: floatIn 0.8s ease 1s both;
+}
+
+.skipBtn:hover,
+.skipBtn:focus {
+  color: #7a4a00;
+  border-color: #7a4a00;
+  outline: 2px solid #7a4a00;
+  outline-offset: 2px;
+}
+
+/* Reduced-motion: disable all animations, assert final visible state */
+@media (prefers-reduced-motion: reduce) {
+  .splash {
+    animation: none;
+  }
+
+  .logo {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .mascot {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .pressAnyKey {
+    animation: none;
+    opacity: 1;
+  }
+
+  .skipBtn {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
